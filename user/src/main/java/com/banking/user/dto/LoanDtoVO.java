@@ -1,5 +1,12 @@
 package com.banking.user.dto;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class LoanDtoVO {
 		private int id;
 		public int getId() {
@@ -15,11 +22,30 @@ public class LoanDtoVO {
 		public void setUserId(int userId) {
 			this.userId = userId;
 		}
+		@NotEmpty
+		@Size(max=50)
 		private String loan_type;
+		@NotEmpty
+		@Min(0)
 		private long amount;
+		@NotEmpty
+		@JsonFormat( pattern = "MM/dd/yyyy")
 		private String date;
+		@NotEmpty
+		@Min(0)
+		@Max(100)
 		private long rate_of_interest;
+		@NotEmpty
+		@Min(0)
 		private long duration;
+		
+		public String getStatus() {
+			return status;
+		}
+		public void setStatus(String status) {
+			this.status = status;
+		}
+		private String status;
 		public String getLoan_type() {
 			return loan_type;
 		}

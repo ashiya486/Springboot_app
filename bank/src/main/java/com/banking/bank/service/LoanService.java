@@ -16,5 +16,6 @@ public interface LoanService {
 	String nothing();
 	void approveLoan(Integer id);
 	void rejectLoan(Integer id);
+	List<LoanDto> filterStatus(String status);
 
 }

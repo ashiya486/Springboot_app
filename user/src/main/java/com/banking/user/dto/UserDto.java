@@ -1,5 +1,13 @@
 package com.banking.user.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class UserDto {
 	private int id;
 	public int getId() {
@@ -25,18 +33,42 @@ public class UserDto {
 	public void setDob(String dob) {
 		this.dob = dob;
 	}
-
+@NotEmpty
+@Size(max=50,message="name should not exceed 50 chars")
 	private String name;
+@NotEmpty
+@Size(min=8,max=20)
+@Pattern(regexp = "(?!.*[@#$%^&+=()]")
 	private String Username;
+@NotEmpty
+@Size(min=8,max=20)
+@Pattern(regexp= "^(?=.*[A-Z]) (?=.*[a-z]) (?=.*[0-9])(?=.*[@#$%^&-+=()]$")
 	private String password;
+@NotEmpty
+@Size(max=200)
 	private String address;
+@NotEmpty
+@Size(max=50)
 	private String state;
+@NotEmpty
+@Size(max=100)
 	private String country;
+@NotEmpty
+@Email(message="email address not valid")
 	private String email;
+@NotEmpty
+@Size(min=10,max=10)
 	private String pan;
+@NotEmpty
+@Size(min=10,max=10)
 	private String contact_no;
+@NotEmpty
+@JsonFormat( pattern = "MM/dd/yyyy")
 	private String dob;
+@NotEmpty
+@Size(max=50)
 	private String account_type;
+@NotEmpty
 	private String role;
 
 	public String getRole() {

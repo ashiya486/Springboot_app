@@ -42,7 +42,7 @@ public class AdminController {
 	public ResponseEntity<?> getallloans() throws URISyntaxException{
 		HttpHeaders headers=new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-//		HttpEntity<Integer> entity =new HttpEntity<>(id,headers);
+
 		 return restTemplate.getForEntity(endpoint, List.class);
 }
 	@PutMapping("/loan/approve/{id}")
@@ -56,7 +56,6 @@ public class AdminController {
 		HttpHeaders headers=new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		 return restTemplate.getForEntity(endpoint+"reject/"+id, String.class);
-//		return ResponseEntity.of(Optional.of("comp"));
 	}
 
 }

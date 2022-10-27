@@ -53,11 +53,16 @@ public ResponseEntity<List<LoanDto>> getAllLoan(){
 	return ResponseEntity.of(Optional.of(loans));
 }
 
-//@GetMapping("/{id}") //get loan by load id
-//public ResponseEntity<LoanDto> getLoan(@PathVariable Integer id){
-//	LoanDto fetchedLoan=this.loanService.getLoanById(id);
-//	return ResponseEntity.of(Optional.of(fetchedLoan));
-//}
+@GetMapping("/test/{id}") //get loan by load id
+public ResponseEntity<LoanDto> getLoanByLoanID(@PathVariable Integer id){
+	LoanDto fetchedLoan=this.loanService.getLoanById(id);
+	return ResponseEntity.of(Optional.of(fetchedLoan));
+}
+@GetMapping("/test/{filter}") //get loan by load id
+public ResponseEntity<String> approveFilter(@PathVariable String filter){
+//	List<LoanDto> fetchedLoan=this.loanService.filterStatus(filter);
+	return ResponseEntity.of(Optional.of(filter));
+}
 //@DeleteMapping("/{id}")
 //public ResponseEntity<String> deleteLoan(@PathVariable Integer id){
 //	this.loanService.deleteLoan(id);

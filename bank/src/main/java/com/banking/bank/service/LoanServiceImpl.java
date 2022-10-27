@@ -2,6 +2,8 @@ package com.banking.bank.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ public class LoanServiceImpl implements LoanService {
 	public LoanDto createLoan(LoanDto loanDto) {
 		Loan loan=this.dtoToLoan(loanDto);
 		LoanDto createdLoan=this.loanToDto(this.loanRepo.save(loan));
-		return createdLoan;
+		return this.loanToDto(loan);
 	}
 
 	@Override
@@ -95,6 +97,13 @@ public void rejectLoan(Integer id) throws NullPointerException {
 		
 		
 	}
+
+@Override
+public List<LoanDto> filterStatus(String status) {
+	List<Loan>filteredLoan=this.loanRepo.findAllByStatus(status);
+		return filteredLoan.stream().map(loan->this.loanToDto(loan)).collect(Collectors.toList());
+	
+}
 	
 
 }

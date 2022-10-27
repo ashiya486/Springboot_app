@@ -3,6 +3,7 @@ package com.banking.user.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,17 +15,29 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(nullable=false)
 	private String name;
+	@Column(unique=true,nullable=false)
 	private String username;
+	@Column(nullable=false)
 	private String password;
+	@Column(nullable=true)
 	private String address;
+	@Column(nullable=true)
 	private String state;
+	@Column(nullable=true)
 	private String country;
+	@Column(nullable=true,unique=true)
 	private String email;
+	@Column(nullable=true)
 	private String pan;
+	@Column(nullable=true)
 	private String contact_no;
+	@Column(nullable=true)
 	private String dob;
+	@Column(nullable=true)
 	private String account_type;
+	@Column(nullable=true)
 	private String role;
 
 	public String getRole() {

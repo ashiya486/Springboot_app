@@ -15,16 +15,23 @@ public class LoanDto {
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
-	private String loan_type;
+	private String loanType;
 	private long amount;
 	private String date;
-	private long rate_of_interest;
+	private long rateOfInterest;
 	private long duration;
-	public String getLoan_type() {
-		return loan_type;
+	private String status;
+	public String getStatus() {
+		return status;
 	}
-	public void setLoan_type(String loan_type) {
-		this.loan_type = loan_type;
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getLoanType() {
+		return loanType;
+	}
+	public void setLoanType(String loanType) {
+		this.loanType = loanType;
 	}
 	public long getAmount() {
 		return amount;
@@ -38,11 +45,11 @@ public class LoanDto {
 	public void setDate(String date) {
 		this.date = date;
 	}
-	public long getRate_of_interest() {
-		return rate_of_interest;
+	public long getRateOfInterest() {
+		return rateOfInterest;
 	}
-	public void setRate_of_interest(long rate_of_interest) {
-		this.rate_of_interest = rate_of_interest;
+	public void setRateOfInterest(long rateOfInterest) {
+		this.rateOfInterest = rateOfInterest;
 	}
 	public long getDuration() {
 		return duration;
