@@ -54,8 +54,9 @@ public class LoanServiceImpl implements LoanService {
 
 	@Override
 	public List<LoanDto> getAllLoan() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Loan> loanList=this.loanRepo.findAll();
+		return loanList.stream().map(loan->this.loanToDto(loan)).collect(Collectors.toList());
+		 
 	}
 	public LoanDto loanToDto(Loan loan) {
 		return this.modelMapper.map(loan, LoanDto.class);
@@ -79,11 +80,8 @@ return "nothing";
 public void approveLoan(Integer id) throws NullPointerException{
 
 	Loan loan =this.loanRepo.findById(id).orElse(null);
-//	loan.setSTatus("approved");
+	loan.setStatus("approved");
 this.loanRepo.save(loan);
-
-	
-	
 }
 
 @Override
@@ -91,12 +89,9 @@ public void rejectLoan(Integer id) throws NullPointerException {
 
 
 		Loan loan =this.loanRepo.findById(id).orElse(null);
-//		loan.setSTatus("rejected");
+		loan.setStatus("rejected");
 	this.loanRepo.save(loan);
-
-		
-		
-	}
+}
 
 @Override
 public List<LoanDto> filterStatus(String status) {

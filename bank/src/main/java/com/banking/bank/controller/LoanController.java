@@ -32,7 +32,7 @@ public ResponseEntity<LoanDto> createLoan(@RequestBody LoanDto loanDto)
 	}
 
 @GetMapping("/{id}") 
-public ResponseEntity<LoanDto> getLoan(@PathVariable Integer id){
+public ResponseEntity<LoanDto> getLoanByUserId(@PathVariable Integer id){
 	LoanDto fetchedLoan=this.loanService.getLoanByUserId(id);
 	return ResponseEntity.of(Optional.of(fetchedLoan));
 }
@@ -53,16 +53,16 @@ public ResponseEntity<List<LoanDto>> getAllLoan(){
 	return ResponseEntity.of(Optional.of(loans));
 }
 
-@GetMapping("/test/{id}") //get loan by load id
-public ResponseEntity<LoanDto> getLoanByLoanID(@PathVariable Integer id){
-	LoanDto fetchedLoan=this.loanService.getLoanById(id);
+@GetMapping("/filter/{id}") 
+public ResponseEntity<List<LoanDto>> loanFilter(@PathVariable("id") String filter){
+	List<LoanDto> fetchedLoan=this.loanService.filterStatus(filter);
 	return ResponseEntity.of(Optional.of(fetchedLoan));
 }
-@GetMapping("/test/{filter}") //get loan by load id
-public ResponseEntity<String> approveFilter(@PathVariable String filter){
-//	List<LoanDto> fetchedLoan=this.loanService.filterStatus(filter);
-	return ResponseEntity.of(Optional.of(filter));
-}
+//@GetMapping("/test/{id}") //get loan by loan id
+//public ResponseEntity<LoanDto> getLoanByLoanID(@PathVariable Integer id){
+//	LoanDto fetchedLoan=this.loanService.getLoanById(id);
+//	return ResponseEntity.of(Optional.of(fetchedLoan));
+//}
 //@DeleteMapping("/{id}")
 //public ResponseEntity<String> deleteLoan(@PathVariable Integer id){
 //	this.loanService.deleteLoan(id);
