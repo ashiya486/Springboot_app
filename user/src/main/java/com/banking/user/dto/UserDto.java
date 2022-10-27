@@ -38,11 +38,11 @@ public class UserDto {
 	private String name;
 @NotEmpty
 @Size(min=8,max=20)
-@Pattern(regexp = "(?!.*[@#$%^&+=()]")
+//@Pattern(regexp = "(?!.*[@#$%^&+=()]")
 	private String Username;
 @NotEmpty
 @Size(min=8,max=20)
-@Pattern(regexp= "^(?=.*[A-Z]) (?=.*[a-z]) (?=.*[0-9])(?=.*[@#$%^&-+=()]$")
+//@Pattern(regexp= "^(?=.*[A-Z]) (?=.*[a-z]) (?=.*[0-9])(?=.*[@#$%^&-+=()]$")
 	private String password;
 @NotEmpty
 @Size(max=200)
@@ -61,13 +61,13 @@ public class UserDto {
 	private String pan;
 @NotEmpty
 @Size(min=10,max=10)
-	private String contact_no;
+	private String contactNo;
 @NotEmpty
 @JsonFormat( pattern = "MM/dd/yyyy")
 	private String dob;
 @NotEmpty
 @Size(max=50)
-	private String account_type;
+	private String accountType;
 @NotEmpty
 	private String role;
 
@@ -136,21 +136,21 @@ public class UserDto {
 	}
 
 
-	public String getContact_no() {
-		return contact_no;
+	public String getContactNo() {
+		return contactNo;
 	}
 
-	public void setContact_no(String contact_no) {
-		this.contact_no = contact_no;
+	public void setContactNo(String contactNo) {
+		this.contactNo = contactNo;
 	}
 
 
-	public String getAccount_type() {
-		return account_type;
+	public String getAccountType() {
+		return accountType;
 	}
 
-	public void setAccount_type(String account_type) {
-		this.account_type = account_type;
+	public void setAccountType(String accountType) {
+		this.accountType = accountType;
 	}
 
 }

@@ -32,11 +32,11 @@ public class User {
 	@Column(nullable=true)
 	private String pan;
 	@Column(nullable=true)
-	private String contact_no;
+	private String contactNo;
 	@Column(nullable=true)
 	private String dob;
 	@Column(nullable=true)
-	private String account_type;
+	private String accountType;
 	@Column(nullable=true)
 	private String role;
 
@@ -128,20 +128,20 @@ public class User {
 		this.dob = dob;
 	}
 
-	public String getContact_no() {
-		return contact_no;
+	public String getContactNo() {
+		return contactNo;
 	}
 
-	public void setContact_no(String contact_no) {
-		this.contact_no = contact_no;
+	public void setContactNo(String contactNo) {
+		this.contactNo = contactNo;
 	}
 
-	public String getAccount_type() {
-		return account_type;
+	public String getAccountType() {
+		return accountType;
 	}
 
-	public void setAccount_type(String account_type) {
-		this.account_type = account_type;
+	public void setAccountType(String accountType) {
+		this.accountType = accountType;
 	}
 
 }

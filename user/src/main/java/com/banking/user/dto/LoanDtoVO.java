@@ -24,7 +24,7 @@ public class LoanDtoVO {
 		}
 		@NotEmpty
 		@Size(max=50)
-		private String loan_type;
+		private String loanType;
 		@NotEmpty
 		@Min(0)
 		private long amount;
@@ -34,7 +34,7 @@ public class LoanDtoVO {
 		@NotEmpty
 		@Min(0)
 		@Max(100)
-		private long rate_of_interest;
+		private long rateOfInterest;
 		@NotEmpty
 		@Min(0)
 		private long duration;
@@ -46,11 +46,11 @@ public class LoanDtoVO {
 			this.status = status;
 		}
 		private String status;
-		public String getLoan_type() {
-			return loan_type;
+		public String getLoanType() {
+			return loanType;
 		}
-		public void setLoan_type(String loan_type) {
-			this.loan_type = loan_type;
+		public void setLoanType(String loanType) {
+			this.loanType = loanType;
 		}
 		public long getAmount() {
 			return amount;
@@ -64,11 +64,11 @@ public class LoanDtoVO {
 		public void setDate(String date) {
 			this.date = date;
 		}
-		public long getRate_of_interest() {
-			return rate_of_interest;
+		public long getRateOfInterest() {
+			return rateOfInterest;
 		}
-		public void setRate_of_interest(long rate_of_interest) {
-			this.rate_of_interest = rate_of_interest;
+		public void setRateOfInterest(long rateOfInterest) {
+			this.rateOfInterest = rateOfInterest;
 		}
 		public long getDuration() {
 			return duration;

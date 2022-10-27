@@ -36,11 +36,6 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 String endpoint="http://localhost:8082/bank/";
-@PostMapping("/")
-public ResponseEntity<UserDto> createUser(@Valid@RequestBody UserDto userDto) {
-	UserDto createdUser=this.userService.createUser(userDto);
-	return ResponseEntity.of(Optional.of(createdUser));
-}
 @PutMapping("/{id}")
 public ResponseEntity<UserDto> updateUser(@Valid@RequestBody UserDto userDto,@PathVariable Integer id){
 	UserDto updatedUser=this.userService.updateUser(userDto, id);
@@ -53,18 +48,12 @@ public ResponseEntity<UserDto> getUser(@PathVariable Integer id) {
 	return ResponseEntity.of(Optional.of(fetchedUser));
 }
 @PostMapping("/loan")
-public ResponseEntity<?> createLoan(@Valid@RequestBody LoanDtoVO loanDto ) throws URISyntaxException{
+public ResponseEntity<?> createLoan(@RequestBody LoanDtoVO loanDto ) throws URISyntaxException{
 	HttpHeaders headers=new HttpHeaders();
 	headers.setContentType(MediaType.APPLICATION_JSON);
 	HttpEntity<LoanDtoVO> entity =new HttpEntity<>(loanDto,headers);
 	return restTemplate.postForEntity(endpoint, entity,LoanDtoVO.class );
 
-//	RequestEntity request = RequestEntity
-//		     .post(new URI("http://localhost:8082/bank/"))
-//		     .accept(MediaType.APPLICATION_JSON)
-//		     .body(loanDto);
-//	return restTemplate.exchange(entity, LoanDtoVO.class);
-//	return ResponseEntity.of(Optional.of(entity));
 	}
 @GetMapping("/loan/{id}")
 public ResponseEntity<?> getLoanForUser(@PathVariable Integer id) throws URISyntaxException{

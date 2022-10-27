@@ -32,12 +32,8 @@ public class AdminController {
 	@GetMapping("/")
 	public ResponseEntity<List<UserDto>> getAllUsers(){
 		List<UserDto> fethcedUsers=this.userService.getAllUsers();
-		return ResponseEntity.of(Optional.of(fethcedUsers));
-	}
-	@DeleteMapping("/del/{id}")
-	public void deleteUser(@PathVariable Integer id) {
-		this.userService.deleteUser(id);
-	}
+		return ResponseEntity.of(Optional.of(fethcedUsers));}
+
 	@GetMapping("/loan")
 	public ResponseEntity<?> getallloans() throws URISyntaxException{
 		HttpHeaders headers=new HttpHeaders();
@@ -57,5 +53,15 @@ public class AdminController {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		 return restTemplate.getForEntity(endpoint+"reject/"+id, String.class);
 	}
+	@GetMapping("/loan/filter/{id}")
+	public ResponseEntity<?> filterloan(@PathVariable("id") String id) throws URISyntaxException{
+		HttpHeaders headers=new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		 return restTemplate.getForEntity(endpoint+"filter/"+id, String.class);
+	}
+//	@DeleteMapping("/del/{id}")
+//	public void deleteUser(@PathVariable Integer id) {
+//		this.userService.deleteUser(id);
+//	}
 
 }

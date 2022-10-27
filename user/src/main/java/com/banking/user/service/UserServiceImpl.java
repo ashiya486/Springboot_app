@@ -38,6 +38,7 @@ private ModelMapper modelMapper;
 		}
 		user=this.modelMapper.map(userDto, User.class);
 		user.setId(id);
+		user.setPassword(passEncode.encode(user.getPassword()));
 		User updatedUser=this.userRepo.save(user);
 		UserDto updatedUserDto=this.userToDto(updatedUser);
 		return updatedUserDto;

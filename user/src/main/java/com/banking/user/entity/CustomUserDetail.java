@@ -31,11 +31,13 @@ private User user;
 	@Override
 	public String getPassword() {
 		return this.user.getPassword();
+
 	}
 
 	@Override
 	public String getUsername() {
 		return this.user.getUsername();
+
 	}
 
 	@Override
