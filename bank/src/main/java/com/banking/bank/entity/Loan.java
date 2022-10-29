@@ -4,24 +4,31 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+
+import com.sun.istack.NotNull;
 @Entity
 public class Loan {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 private int id;
+	@NotNull
 private int userId;
 public int getUserId() {
 	return userId;
 }
 public void setUserId(int userId) {
 	this.userId = userId;
-}
+}@NotNull
 private String loanType;
+@NotNull
 private long amount;
+@NotNull
 private String date;
+@NotNull
 private long rateOfInterest;
+@NotNull
 private long duration;
+@NotNull
 private String status;
 public String getStatus() {
 	return status;

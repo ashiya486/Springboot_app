@@ -32,8 +32,6 @@ public class UserController {
 	@Autowired
 	private RestTemplate restTemplate;
 	@Autowired
-	private BCryptPasswordEncoder pencode;
-	@Autowired
 	private UserService userService;
 String endpoint="http://localhost:8082/bank/";
 @PutMapping("/{id}")

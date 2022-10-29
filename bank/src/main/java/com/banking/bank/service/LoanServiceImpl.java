@@ -2,7 +2,6 @@ package com.banking.bank.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -22,7 +21,7 @@ public class LoanServiceImpl implements LoanService {
 	public LoanDto createLoan(LoanDto loanDto) {
 		Loan loan=this.dtoToLoan(loanDto);
 		LoanDto createdLoan=this.loanToDto(this.loanRepo.save(loan));
-		return this.loanToDto(loan);
+		return createdLoan;
 	}
 
 	@Override
