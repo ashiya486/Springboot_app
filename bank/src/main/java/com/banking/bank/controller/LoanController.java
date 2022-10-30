@@ -27,7 +27,7 @@ private LoanService loanService;
 public ResponseEntity<LoanDto> createLoan(@Valid@RequestBody LoanDto loanDto)
 {
 	LoanDto loan=this.loanService.createLoan(loanDto);
-	return ResponseEntity.of(Optional.of(loanDto));
+	return ResponseEntity.of(Optional.of(loan));
 	}
 
 @GetMapping("/{id}") 
