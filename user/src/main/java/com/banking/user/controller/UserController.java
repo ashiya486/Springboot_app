@@ -3,6 +3,7 @@ package com.banking.user.controller;
 
 
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 
@@ -10,9 +11,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,17 +34,27 @@ public class UserController {
 	private RestTemplate restTemplate;
 	@Autowired
 	private UserService userService;
-String endpoint="http://localhost:8082/bank/";
+String endpoint="http://BANK-SERVICE/bank/";
 @PutMapping("/{id}")
 public ResponseEntity<UserDto> updateUser(@Valid@RequestBody UserDto userDto,@PathVariable Integer id){
 	UserDto updatedUser=this.userService.updateUser(userDto, id);
 	return ResponseEntity.of(Optional.of(updatedUser)) ;
 }
+@GetMapping("/loan")
+public ResponseEntity<?> getallloans() throws URISyntaxException{
+	HttpHeaders headers=new HttpHeaders();
+	headers.setContentType(MediaType.APPLICATION_JSON);
+return restTemplate.getForEntity(endpoint, List.class);
+}
 
 @GetMapping("/{id}")
 public ResponseEntity<UserDto> getUser(@PathVariable Integer id) {
 	UserDto fetchedUser= this.userService.getUserByUserId(id);
-	return ResponseEntity.of(Optional.of(fetchedUser));
+	if(fetchedUser==null) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	}
+return ResponseEntity.ok(fetchedUser);
+	
 }
 @PostMapping("/loan")
 public ResponseEntity<?> createLoan(@RequestBody LoanDtoVO loanDto ) throws URISyntaxException{

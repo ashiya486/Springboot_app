@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.banking.user.service.CustomUserDetailService;
 
@@ -40,7 +41,7 @@ private CustomUserDetailService myUserDetailService;
 		.and()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
-		.exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint);
+		.exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint).and().logout().logoutUrl("home/logout").permitAll();
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 

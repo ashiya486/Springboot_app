@@ -1,15 +1,15 @@
 package com.banking.user.entity;
 
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.springframework.stereotype.Component;
+
 @Entity
-public class User {
+public class User{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -19,6 +19,24 @@ public class User {
 	private String username;
 	@Column(nullable=false)
 	private String password;
+	public User(int id, String name, String username, String password, String address, String state, String country,
+			String email, String pan, String contactNo, String dob, String accountType, String role) {
+		this.id = id;
+		this.name = name;
+		this.username = username;
+		this.password = password;
+		this.address = address;
+		this.state = state;
+		this.country = country;
+		this.email = email;
+		this.pan = pan;
+		this.contactNo = contactNo;
+		this.dob = dob;
+		this.accountType = accountType;
+		this.role = role;
+	}
+	public User() {}
+
 	@Column(nullable=true)
 	private String address;
 	@Column(nullable=true)

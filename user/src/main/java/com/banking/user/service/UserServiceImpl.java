@@ -1,6 +1,7 @@
 package com.banking.user.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -42,24 +43,12 @@ private ModelMapper modelMapper;
 		User updatedUser=this.userRepo.save(user);
 		UserDto updatedUserDto=this.userToDto(updatedUser);
 		return updatedUserDto;
-//		user.setName(userDto.getName());
-//		user.setUsername(userDto.getUsername());
-//		user.setPassword(userDto.getPassword());
-//		user.setAddress(userDto.getAddress());
-//		user.setState(userDto.getState());
-//		user.setCountry(userDto.getCountry());
-//		user.setEmail(userDto.getEmail());
-//		user.setPAN(userDto.getPAN());
-//		user.setContact_no(userDto.getContact_no());
-//		user.setDOB(userDto.getDOB());
-//		user.setAccount_type(userDto.getAccount_type());
-//		User updatedUser=this.userRepo.save(user);
-//		return this.userToDto(updatedUser);
+
 	}
 
 	@Override
 	public UserDto getUserByUserId(Integer id) {
-		User user=this.userRepo.findById(id).orElse(null);
+		User user=this.userRepo.findById(id).orElseThrow(()-> new NoSuchElementException("NO CUSTOMER PRESENT WITH ID = " + id));
 		return this.userToDto(user);
 	}
 

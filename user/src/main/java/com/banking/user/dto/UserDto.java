@@ -1,13 +1,21 @@
 package com.banking.user.dto;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class UserDto {
-	private int id;
+	@Autowired
+private int id;
 	public int getId() {
 		return id;
 	}
@@ -30,17 +38,22 @@ public class UserDto {
 
 	public void setDob(String dob) {
 		this.dob = dob;
+		LocalDate currentDate = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		LocalDate date = LocalDate.parse(dob, formatter);
+		if(calculateAge(date,currentDate)<18){throw new RuntimeException("must be 18 years old");
+		}
 	}
 @NotEmpty
 @Size(max=50,message="name should not exceed 50 chars")
 	private String name;
 @NotEmpty
 @Size(min=8,max=20)
-//@Pattern(regexp = "(?!.*[@#$%^&+=()]")
+@Pattern(regexp = "^(?!.*?[@#$%^&+=()]).{8,20}$")
 	private String Username;
 @NotEmpty
 @Size(min=8,max=20)
-//@Pattern(regexp= "^(?=.*[A-Z]) (?=.*[a-z]) (?=.*[0-9])(?=.*[@#$%^&-+=()]$")
+@Pattern(regexp ="^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\\d]){1,})(?=(.*[\\W]){1,})(?!.*\\s).{8,20}$")
 	private String password;
 @NotEmpty
 @Size(max=200)
@@ -61,8 +74,8 @@ public class UserDto {
 @Size(min=10,max=10)
 	private String contactNo;
 @NotEmpty
-@JsonFormat( pattern = "MM/dd/yyyy")
-	private String dob;
+@JsonFormat( pattern = "dd/MM/yyyy")
+private String dob;
 @NotEmpty
 @Size(max=50)
 	private String accountType;
@@ -150,5 +163,10 @@ public class UserDto {
 	public void setAccountType(String accountType) {
 		this.accountType = accountType;
 	}
-
+	public int calculateAge(
+			  LocalDate birthDate,
+			  LocalDate currentDate) {
+			    // validate inputs ...
+			    return Period.between(birthDate, currentDate).getYears();
+			}
 }

@@ -2,5 +2,7 @@ eureka:
    client:
       registerWithEureka: false
       fetchRegistry: false
+   instance:
+    hostname: localhost
 server:
    port: 8761

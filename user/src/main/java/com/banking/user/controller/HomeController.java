@@ -50,4 +50,8 @@ public class HomeController {
 		UserDto createdUser=this.userService.createUser(userDto);
 		return ResponseEntity.of(Optional.of(createdUser));
 	}
+	@PostMapping("/logout")
+	public ResponseEntity<String> Logout() {
+return ResponseEntity.of(Optional.of("logout successfully"));
+	}
 }
