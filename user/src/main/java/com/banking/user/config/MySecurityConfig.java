@@ -34,7 +34,7 @@ private CustomUserDetailService myUserDetailService;
 		.authorizeRequests()
 		.antMatchers("/home/admin/**").hasRole("ADMIN")
 		.antMatchers("/home/user/**").hasRole("USER")
-		.antMatchers("/home/auth","/home/register")
+		.antMatchers("/home/auth","/home/register","/home/test")
 		.permitAll()
 		.anyRequest()
 		.permitAll()

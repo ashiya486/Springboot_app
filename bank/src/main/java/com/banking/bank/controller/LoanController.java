@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,43 +21,66 @@ import com.banking.bank.service.LoanService;
 @RestController
 @RequestMapping("/bank")
 public class LoanController {
-@Autowired
-private LoanService loanService;
+	@Autowired
+	private LoanService loanService;
 
-@PostMapping("/")
-public ResponseEntity<LoanDto> createLoan(@Valid@RequestBody LoanDto loanDto)
-{
-	LoanDto loan=this.loanService.createLoan(loanDto);
-	return ResponseEntity.of(Optional.of(loan));
+	@PostMapping("/")
+	public ResponseEntity<LoanDto> createLoan(@Valid @RequestBody LoanDto loanDto) {
+		LoanDto loan = this.loanService.createLoan(loanDto);
+		return ResponseEntity.of(Optional.of(loan));
 	}
 
-@GetMapping("/{id}") 
-public ResponseEntity<LoanDto> getLoanByUserId(@PathVariable Integer id){
-	LoanDto fetchedLoan=this.loanService.getLoanByUserId(id);
-	return ResponseEntity.of(Optional.of(fetchedLoan));
-}
+	@GetMapping("/{id}")
+	public ResponseEntity<LoanDto> getLoanByUserId(@PathVariable Integer id) {
+		LoanDto fetchedLoan = this.loanService.getLoanByUserId(id);
+		if (fetchedLoan != null) {
+			return ResponseEntity.of(Optional.of(fetchedLoan));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
 
-@GetMapping("/approve/{id}")
-public String approveLoan(@PathVariable Integer id){
-this.loanService.approveLoan(id);
-	return "approved loan for loan id "+id;
-}
-@GetMapping("/reject/{id}")
-public String rejectLoan(@PathVariable Integer id){
-	this.loanService.rejectLoan(id);
-	return "rejected loan for loan id "+id;
-}
-@GetMapping("/")
-public ResponseEntity<List<LoanDto>> getAllLoan(){
-	List<LoanDto> loans=this.loanService.getAllLoan();
-	return ResponseEntity.of(Optional.of(loans));
-}
+	@GetMapping("/approve/{id}")
+	public ResponseEntity<String> approveLoan(@PathVariable Integer id) {
+		try {
+			this.loanService.approveLoan(id);
+			return ResponseEntity.ok("approved loan for loan id " + id);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
 
-@GetMapping("/filter/{id}") 
-public ResponseEntity<List<LoanDto>> loanFilter(@PathVariable("id") String filter){
-	List<LoanDto> fetchedLoan=this.loanService.filterStatus(filter);
-	return ResponseEntity.of(Optional.of(fetchedLoan));
-}
+	@GetMapping("/reject/{id}")
+	public ResponseEntity<String> rejectLoan(@PathVariable Integer id) {
+		try {
+			this.loanService.rejectLoan(id);
+			return ResponseEntity.ok("rejected loan for loan id " + id);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
+
+	@GetMapping("/")
+	public ResponseEntity<List<LoanDto>> getAllLoan() {
+
+		List<LoanDto> loans = this.loanService.getAllLoan();
+		if (!loans.isEmpty()) {
+			return ResponseEntity.of(Optional.of(loans));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+
+	}
+
+	@GetMapping("/filter/{id}")
+	public ResponseEntity<?> loanFilter(@PathVariable("id") String filter) {
+		List<LoanDto> fetchedLoan = this.loanService.filterStatus(filter);
+		if (!fetchedLoan.isEmpty()) {
+			return ResponseEntity.of(Optional.of(fetchedLoan));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
 //@GetMapping("/test/{id}") //get loan by loan id
 //public ResponseEntity<LoanDto> getLoanByLoanID(@PathVariable Integer id){
 //	LoanDto fetchedLoan=this.loanService.getLoanById(id);

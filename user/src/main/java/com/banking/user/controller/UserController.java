@@ -1,12 +1,9 @@
 package com.banking.user.controller;
 
-
-
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -21,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import com.banking.user.dto.LoanDtoVO;
@@ -34,41 +32,41 @@ public class UserController {
 	private RestTemplate restTemplate;
 	@Autowired
 	private UserService userService;
-String endpoint="http://BANK-SERVICE/bank/";
-@PutMapping("/{id}")
-public ResponseEntity<UserDto> updateUser(@Valid@RequestBody UserDto userDto,@PathVariable Integer id){
-	UserDto updatedUser=this.userService.updateUser(userDto, id);
-	return ResponseEntity.of(Optional.of(updatedUser)) ;
-}
-@GetMapping("/loan")
-public ResponseEntity<?> getallloans() throws URISyntaxException{
-	HttpHeaders headers=new HttpHeaders();
-	headers.setContentType(MediaType.APPLICATION_JSON);
-return restTemplate.getForEntity(endpoint, List.class);
-}
+	String endpoint = "http://BANK-SERVICE/bank/";
 
-@GetMapping("/{id}")
-public ResponseEntity<UserDto> getUser(@PathVariable Integer id) {
-	UserDto fetchedUser= this.userService.getUserByUserId(id);
-	if(fetchedUser==null) {
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	@PutMapping("/{id}")
+	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Integer id) {
+		try {
+			UserDto updatedUser = this.userService.updateUser(userDto, id);
+			return ResponseEntity.of(Optional.of(updatedUser));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		}
 	}
-return ResponseEntity.ok(fetchedUser);
-	
-}
-@PostMapping("/loan")
-public ResponseEntity<?> createLoan(@RequestBody LoanDtoVO loanDto ) throws URISyntaxException{
-	HttpHeaders headers=new HttpHeaders();
-	headers.setContentType(MediaType.APPLICATION_JSON);
-	HttpEntity<LoanDtoVO> entity =new HttpEntity<>(loanDto,headers);
-	return restTemplate.postForEntity(endpoint, entity,LoanDtoVO.class );
+
+	@GetMapping("/{id}")
+	public ResponseEntity<UserDto> getUser(@PathVariable Integer id) {
+		try{UserDto fetchedUser = this.userService.getUserByUserId(id);
+		return ResponseEntity.ok(fetchedUser);}
+		catch(Exception e){	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();}
+			}
+
+	@PostMapping("/loan")
+	public ResponseEntity<?> createLoan(@RequestBody LoanDtoVO loanDto){
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<LoanDtoVO> entity = new HttpEntity<>(loanDto, headers);
+		try{return restTemplate.postForEntity(endpoint, entity, LoanDtoVO.class);}
+		catch(RestClientResponseException e) {return ResponseEntity.status(e.getRawStatusCode()).build();}
 
 	}
-@GetMapping("/loan/{id}")
-public ResponseEntity<?> getLoanForUser(@PathVariable Integer id) throws URISyntaxException{
-	HttpHeaders headers=new HttpHeaders();
-	headers.setContentType(MediaType.APPLICATION_JSON);
-	return restTemplate.getForEntity(endpoint+id, LoanDtoVO.class);
+
+	@GetMapping("/loan/{id}")
+	public ResponseEntity<?> getLoanForUser(@PathVariable Integer id){
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		try{return restTemplate.getForEntity(endpoint + id, LoanDtoVO.class);}
+		catch(RestClientResponseException e) {return ResponseEntity.status(e.getRawStatusCode()).build();}
 	}
 //@PutMapping("/loan/{id}")
 //public ResponseEntity<?> updateLoanForUser(@RequestBody LoanDtoVO loanDto,@PathVariable Integer id) throws URISyntaxException{

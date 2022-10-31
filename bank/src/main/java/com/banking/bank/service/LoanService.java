@@ -9,11 +9,10 @@ public interface LoanService {
 	
 	LoanDto createLoan(LoanDto loanDto);
 	LoanDto getLoanById(Integer id);
-	LoanDto updateLoan(LoanDto loanDto,Integer id);
+//	LoanDto updateLoan(LoanDto loanDto,Integer id);
 	List<LoanDto> getAllLoan();
-	void deleteLoan(Integer id);
+//	void deleteLoan(Integer id);
 	LoanDto getLoanByUserId(Integer id);
-	String nothing();
 	void approveLoan(Integer id);
 	void rejectLoan(Integer id);
 	List<LoanDto> filterStatus(String status);

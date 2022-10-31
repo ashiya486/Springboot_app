@@ -1,15 +1,18 @@
 package com.banking.user.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,4 +57,12 @@ public class HomeController {
 	public ResponseEntity<String> Logout() {
 return ResponseEntity.of(Optional.of("logout successfully"));
 	}
+	@RequestMapping("/test")
+	public ResponseEntity<List<UserDto>> getAllUsers(){
+		try{List<UserDto> fethcedUsers=this.userService.getAllUsers();
+		return ResponseEntity.of(Optional.of(fethcedUsers));
+		}
+		catch(Exception e){return ResponseEntity.status(HttpStatus.NOT_FOUND).build();}
+		}
+
 }
