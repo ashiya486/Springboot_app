@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.banking.bank.dto.LoanDto;
+import com.banking.bank.exception.NotfoundException;
 import com.banking.bank.service.LoanService;
 
 @RestController
@@ -27,62 +28,40 @@ public class LoanController {
 	public ResponseEntity<LoanDto> createLoan(@Valid @RequestBody LoanDto loanDto) {
 	LoanDto loan = this.loanService.createLoan(loanDto);
 		return ResponseEntity.of(Optional.of(loan));
-//	catch(Exception e){return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();}
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<LoanDto> getLoanByUserId(@PathVariable Integer id) {
-//		LoanDto fetchedLoan = this.loanService.getLoanByUserId(id);
-//		if (fetchedLoan != null) {
-//			return ResponseEntity.of(Optional.of(fetchedLoan));
-//		} else {
-//			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//		}
-		try {LoanDto fetchedLoan = this.loanService.getLoanByUserId(id);
-		return ResponseEntity.of(Optional.of(fetchedLoan));}
-		catch(Exception e) {return ResponseEntity.status(HttpStatus.NOT_FOUND).build();}
+	public ResponseEntity<List<LoanDto>> getLoanByUserId(@PathVariable Integer id) {
+
+		List<LoanDto> fetchedLoan = this.loanService.getLoanByUserId(id);
+		return ResponseEntity.of(Optional.of(fetchedLoan));
 	}
 
 	@GetMapping("/approve/{id}")
 	public ResponseEntity<String> approveLoan(@PathVariable Integer id) {
-		try {
 			this.loanService.approveLoan(id);
 			return ResponseEntity.ok("approved loan for loan id " + id);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
 	}
 
 	@GetMapping("/reject/{id}")
 	public ResponseEntity<String> rejectLoan(@PathVariable Integer id) {
-		try {
+	
 			this.loanService.rejectLoan(id);
 			return ResponseEntity.ok("rejected loan for loan id " + id);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+
 	}
 
 	@GetMapping("/")
 	public ResponseEntity<List<LoanDto>> getAllLoan() {
-
 		List<LoanDto> loans = this.loanService.getAllLoan();
-		if (!loans.isEmpty()) {
 			return ResponseEntity.of(Optional.of(loans));
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-
 	}
 
 	@GetMapping("/filter/{id}")
 	public ResponseEntity<?> loanFilter(@PathVariable("id") String filter) {
 		List<LoanDto> fetchedLoan = this.loanService.filterStatus(filter);
-		if (!fetchedLoan.isEmpty()) {
 			return ResponseEntity.of(Optional.of(fetchedLoan));
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+
 	}
 //@GetMapping("/test/{id}") //get loan by loan id
 //public ResponseEntity<LoanDto> getLoanByLoanID(@PathVariable Integer id){

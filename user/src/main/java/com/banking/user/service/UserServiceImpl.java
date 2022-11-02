@@ -2,6 +2,7 @@ package com.banking.user.service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.banking.user.dto.UserDto;
 import com.banking.user.entity.User;
+import com.banking.user.exception.BadRequestException;
+import com.banking.user.exception.NotfoundException;
 import com.banking.user.repository.UserRepository;
 
 @Service
@@ -25,10 +28,12 @@ public class UserServiceImpl implements UserService {
 	public UserDto createUser(UserDto userDto) throws RuntimeException {
 		User user = this.dtoToUser(userDto);
 		if (userRepo.findByUsername(user.getUsername()) != null) {
-			throw new RuntimeException("username already taken");
-		} else if (userRepo.findByEmail(user.getEmail()) != null) {
-			throw new RuntimeException("usern already exists with" + user.getEmail() + "email id");
-		} else {
+			throw new BadRequestException("username already taken");
+		}
+		else if (userRepo.findByEmail(user.getEmail()) != null) {
+			throw new BadRequestException("user already exists with email " + user.getEmail());
+		}
+		else {
 			user.setPassword(passEncode.encode(user.getPassword()));
 			User savedUser = this.userRepo.save(user);
 			return this.userToDto(savedUser);
@@ -46,19 +51,23 @@ public class UserServiceImpl implements UserService {
 			UserDto updatedUserDto = this.userToDto(updatedUser);
 			return updatedUserDto;
 		} else {
-			throw new NoSuchElementException();
+			throw new BadRequestException("unable to perform updation:no user exists with user id "+id);
 		}
 	}
 
 	@Override
 	public UserDto getUserByUserId(Integer id) {
-		User user = (this.userRepo.findById(id)).get();
-		return this.userToDto(user);
+		Optional<User> user = this.userRepo.findById(id);
+		if(user.isEmpty())
+			 throw new NotfoundException("No user with user id "+id+" found");
+		return this.userToDto(user.get());
 	}
 
 	@Override
 	public List<UserDto> getAllUsers() {
 		List<User> users = this.userRepo.findAll();
+		if(users.isEmpty())
+			throw new NotfoundException("no users found");
 		List<UserDto> userDtos = users.stream().map(user -> this.userToDto(user)).collect(Collectors.toList());
 		return userDtos;
 	}

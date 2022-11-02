@@ -35,7 +35,7 @@ private CustomUserDetailService myUserDetailService;
 		.antMatchers("/home/auth","/home/register","/home/test")
 		.permitAll()
 		.anyRequest()
-		.permitAll()
+		.authenticated()
 		.and()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()

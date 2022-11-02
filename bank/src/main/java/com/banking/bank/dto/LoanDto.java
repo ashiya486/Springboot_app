@@ -42,7 +42,6 @@ public class LoanDto {
 	@NotNull
 	@Min(0)
 	private long duration;
-	@NotEmpty
 	private String status;
 	public String getStatus() {
 		return status;

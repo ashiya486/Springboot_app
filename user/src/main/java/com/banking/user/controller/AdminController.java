@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +12,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.banking.user.dto.UserDto;
+import com.banking.user.exception.NotfoundException;
+import com.banking.user.exception.RestTemplateException;
 import com.banking.user.service.UserService;
 
 @RestController
@@ -31,11 +32,8 @@ public class AdminController {
 	@GetMapping("/")
 	public ResponseEntity<List<UserDto>> getAllUsers() {
 		List<UserDto> fetchedUsers = this.userService.getAllUsers();
-		if (!fetchedUsers.isEmpty()) {
 			return ResponseEntity.of(Optional.of(fetchedUsers));
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+
 	}
 
 	@GetMapping("/loan")
@@ -43,22 +41,18 @@ public class AdminController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		try {
-			return restTemplate.getForEntity(endpoint, List.class);
-		} catch (RestClientResponseException e) {
-			return ResponseEntity.status(e.getRawStatusCode()).build();
-		}
-
+			return	restTemplate.getForEntity(endpoint, List.class);}
+		catch(HttpClientErrorException e) {throw new RestTemplateException(e.getStatusCode(),e.getResponseBodyAsString());}
+		
 	}
-
+	
 	@PutMapping("/loan/approve/{id}")
 	public ResponseEntity<?> approveloan(@PathVariable Integer id) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		try {
-			return restTemplate.getForEntity(endpoint + "approve/" + id, String.class);
-		} catch (RestClientResponseException e) {
-			return ResponseEntity.status(e.getRawStatusCode()).build();
-		}
+			return restTemplate.getForEntity(endpoint + "approve/" + id, String.class);}
+		catch(HttpClientErrorException e) {throw new RestTemplateException(e.getStatusCode(),e.getResponseBodyAsString());}
 	}
 
 	@PutMapping("/loan/reject/{id}")
@@ -66,10 +60,8 @@ public class AdminController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		try {
-			return restTemplate.getForEntity(endpoint + "reject/" + id, String.class);
-		} catch (RestClientResponseException e) {
-			return ResponseEntity.status(e.getRawStatusCode()).build();
-		}
+			return restTemplate.getForEntity(endpoint + "reject/" + id, String.class);}
+		catch(HttpClientErrorException e){throw new RestTemplateException(e.getStatusCode(),e.getResponseBodyAsString());}
 
 	}
 
@@ -77,13 +69,13 @@ public class AdminController {
 	public ResponseEntity<?> filterloan(@PathVariable("id") String id){
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		try {
-			return restTemplate.getForEntity(endpoint + "filter/" + id, String.class);
-		} catch (RestClientResponseException e) {
-			return ResponseEntity.status(e.getRawStatusCode()).build();
-		}
-
-	}
+try { return restTemplate.getForEntity(endpoint + "filter/" + id, String.class);}
+catch(HttpClientErrorException e){throw new RestTemplateException(e.getStatusCode(),e.getResponseBodyAsString());}
+}
+@GetMapping("test/")
+public ResponseEntity<?>test(){
+	throw new NotfoundException("test method");
+}
 //	@DeleteMapping("/del/{id}")
 //	public void deleteUser(@PathVariable Integer id) {
 //		this.userService.deleteUser(id);

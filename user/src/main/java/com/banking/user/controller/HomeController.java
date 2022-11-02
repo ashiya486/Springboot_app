@@ -19,6 +19,7 @@ import com.banking.user.JwtHelper.JwtUtil;
 import com.banking.user.dto.UserDto;
 import com.banking.user.entity.AuthenticationRequest;
 import com.banking.user.entity.AuthenticationResponse;
+import com.banking.user.exception.BadRequestException;
 import com.banking.user.service.CustomUserDetailService;
 import com.banking.user.service.UserService;
 
@@ -39,7 +40,7 @@ public class HomeController {
 			authenticationManager.
 			authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),authenticationRequest.getPassword()));
 		}
-		catch(Exception e){return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();}
+		catch(Exception e){throw new BadRequestException("invalid credentials");}
 		final UserDetails userDetails=userDetailService.loadUserByUsername(authenticationRequest.getUsername());
 		final String jwt=jwtTokenUtil.generateToken(userDetails);
 		return ResponseEntity.ok(new AuthenticationResponse(jwt));
@@ -47,9 +48,8 @@ public class HomeController {
 	}
 	@PostMapping("/register")
 	public ResponseEntity<UserDto> createUser(@Valid@RequestBody UserDto userDto) {
-		try{UserDto createdUser=this.userService.createUser(userDto);
-		return ResponseEntity.of(Optional.of(createdUser));}
-		catch(Exception e) {return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();}
+		UserDto createdUser=this.userService.createUser(userDto);
+		return ResponseEntity.of(Optional.of(createdUser));
 	}
 	@PostMapping("/logout")
 	public ResponseEntity<String> Logout() {

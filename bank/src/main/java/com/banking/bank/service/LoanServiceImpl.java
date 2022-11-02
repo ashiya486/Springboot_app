@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.banking.bank.dto.LoanDto;
 import com.banking.bank.entity.Loan;
+import com.banking.bank.exception.BadRequestException;
+import com.banking.bank.exception.NotfoundException;
 import com.banking.bank.repository.LoanRepository;
 
 @Service
@@ -20,60 +22,80 @@ public class LoanServiceImpl implements LoanService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public LoanDto createLoan(LoanDto loanDto) {
-		Loan loan = this.dtoToLoan(loanDto);
-		LoanDto createdLoan = this.loanToDto(this.loanRepo.save(loan));
+	public LoanDto createLoan(LoanDto loanDto)throws BadRequestException {
+		Loan loanRequest = this.dtoToLoan(loanDto);
+		List<Loan> listLoan = loanRepo.findAllByUserId(loanRequest.getUserId());
+		if (!listLoan.isEmpty()) {
+			listLoan.stream().forEach(loan -> {
+				if (loan.getLoanType() == loanRequest.getLoanType()
+						&& loan.getAmount() == loanRequest.getAmount()
+						&& loan.getDate() == loanRequest.getDate()
+						&& loan.getRateOfInterest() == loanRequest.getRateOfInterest()
+						&& loan.getDuration() == loanRequest.getDuration())
+					throw new BadRequestException("duplicate loan entry");
+
+			});
+		}
+		loanRequest.setStatus("pending");
+		LoanDto createdLoan = this.loanToDto(this.loanRepo.save(loanRequest));
 		return createdLoan;
 	}
+//
+//	@Override
+//	public LoanDto getLoanById(Integer id) throws NotfoundException  {
+//		Loan loan = this.loanRepo.findById(id).orElse(null);
+//		if (loan == null) {
+//			throw new NoSuchElementException("no loan found with id " + id);
+//		}
+//		return this.loanToDto(loan);
+//	}
 
 	@Override
-	public LoanDto getLoanById(Integer id) throws NoSuchElementException {
-		Loan loan = this.loanRepo.findById(id).orElse(null);
-		if (loan == null) {
-			throw new NoSuchElementException("no loan found with id " + id);
-		}
-		return this.loanToDto(loan);
-	}
-
-	@Override
-	public List<LoanDto> getAllLoan() throws NoSuchElementException {
+	public List<LoanDto> getAllLoan() throws NotfoundException {
 		List<Loan> loanList = this.loanRepo.findAll();
-		if (loanList == null) {
-			throw new NoSuchElementException("no loans found");
+		if (loanList.isEmpty()) {
+			throw new NotfoundException("no loans found");
 		}
 		return loanList.stream().map(loan -> this.loanToDto(loan)).collect(Collectors.toList());
 
 	}
 
 	@Override
-	public LoanDto getLoanByUserId(Integer id) throws NoSuchElementException {
-		Loan loan = this.loanRepo.findByUserId(id);
-		if (loan == null) {
-			throw new NoSuchElementException("no loan found registered under user id " + id);
+	public List<LoanDto> getLoanByUserId(Integer id) throws NotfoundException {
+		List<Loan> loanList = this.loanRepo.findAllByUserId(id);
+		if (loanList.isEmpty()) {
+			throw new NotfoundException("no loan found registered under user id " + id);
 		}
-		else {return this.loanToDto(loan);}
-		}
+		return loanList.stream().map(loan -> this.loanToDto(loan)).collect(Collectors.toList());
+	}
 
 	@Override
-	public void approveLoan(Integer id) throws NoSuchElementException {
-
+	public void approveLoan(Integer id) throws NotfoundException {
 		Loan loan = this.loanRepo.findById(id).orElse(null);
+		if(loan==null)
+			throw new NotfoundException("no loan with id "+id+" found to approve");
 		loan.setStatus("approved");
 		this.loanRepo.save(loan);
 	}
 
 	@Override
-	public void rejectLoan(Integer id) throws NoSuchElementException {
+	public void rejectLoan(Integer id) throws NotfoundException {
 		Loan loan = this.loanRepo.findById(id).orElse(null);
+		if(loan==null)
+			throw new NotfoundException("no loan with id "+id+" found to reject");
 		loan.setStatus("rejected");
 		this.loanRepo.save(loan);
 	}
 
 	@Override
 	public List<LoanDto> filterStatus(String status) throws NoSuchElementException {
+//		if(status!="pending"&&status!="approved"&&status!="rejected")
+//			throw new BadRequestException("request "+status+" does not match any saved filter");
 		List<Loan> filteredLoan = this.loanRepo.findAllByStatus(status);
-return filteredLoan.stream().map(loan -> this.loanToDto(loan)).collect(Collectors.toList());
-}
+		if(filteredLoan.isEmpty())
+			throw new NotfoundException("Currently there are no "+status+" loans ");
+		return filteredLoan.stream().map(loan -> this.loanToDto(loan)).collect(Collectors.toList());
+	}
 
 	public LoanDto loanToDto(Loan loan) {
 		return this.modelMapper.map(loan, LoanDto.class);
