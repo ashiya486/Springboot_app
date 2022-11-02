@@ -22,7 +22,6 @@ private User user;
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		SimpleGrantedAuthority simpleGrantedAuthority =new SimpleGrantedAuthority(user.getRole());
-//		return Arrays.asList(new SimpleGrantedAuthority("Role_User"));
 		return List.of(simpleGrantedAuthority);
 	}
 
@@ -46,19 +45,16 @@ private User user;
 
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 

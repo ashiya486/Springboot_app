@@ -23,21 +23,24 @@ import com.banking.bank.service.LoanService;
 public class LoanController {
 	@Autowired
 	private LoanService loanService;
-
 	@PostMapping("/")
 	public ResponseEntity<LoanDto> createLoan(@Valid @RequestBody LoanDto loanDto) {
-		LoanDto loan = this.loanService.createLoan(loanDto);
+	LoanDto loan = this.loanService.createLoan(loanDto);
 		return ResponseEntity.of(Optional.of(loan));
+//	catch(Exception e){return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();}
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<LoanDto> getLoanByUserId(@PathVariable Integer id) {
-		LoanDto fetchedLoan = this.loanService.getLoanByUserId(id);
-		if (fetchedLoan != null) {
-			return ResponseEntity.of(Optional.of(fetchedLoan));
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+//		LoanDto fetchedLoan = this.loanService.getLoanByUserId(id);
+//		if (fetchedLoan != null) {
+//			return ResponseEntity.of(Optional.of(fetchedLoan));
+//		} else {
+//			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//		}
+		try {LoanDto fetchedLoan = this.loanService.getLoanByUserId(id);
+		return ResponseEntity.of(Optional.of(fetchedLoan));}
+		catch(Exception e) {return ResponseEntity.status(HttpStatus.NOT_FOUND).build();}
 	}
 
 	@GetMapping("/approve/{id}")

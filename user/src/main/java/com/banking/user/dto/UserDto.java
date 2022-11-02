@@ -44,6 +44,29 @@ private int id;
 		if(calculateAge(date,currentDate)<18){throw new RuntimeException("must be 18 years old");
 		}
 	}
+public UserDto(int id, @NotEmpty @Size(max = 50, message = "name should not exceed 50 chars") String name,
+			@NotEmpty @Size(min = 8, max = 20) @Pattern(regexp = "^(?!.*?[@#$%^&+=()]).{8,20}$") String username,
+			@NotEmpty @Size(min = 8, max = 20) @Pattern(regexp = "^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\\d]){1,})(?=(.*[\\W]){1,})(?!.*\\s).{8,20}$") String password,
+			@NotEmpty @Size(max = 200) String address, @NotEmpty @Size(max = 50) String state,
+			@NotEmpty @Size(max = 100) String country,
+			@NotEmpty @Email(message = "email address not valid") String email,
+			@NotEmpty @Size(min = 10, max = 10) String pan, @NotEmpty @Size(min = 10, max = 10) String contactNo,
+			@NotEmpty String dob, @NotEmpty @Size(max = 50) String accountType, @NotEmpty String role) {
+		this.id = id;
+		this.name = name;
+		this.Username = username;
+		this.password = password;
+		this.address = address;
+		this.state = state;
+		this.country = country;
+		this.email = email;
+		this.pan = pan;
+		this.contactNo = contactNo;
+		this.dob = dob;
+		this.accountType = accountType;
+		this.role = role;
+	}
+public UserDto(){}
 @NotEmpty
 @Size(max=50,message="name should not exceed 50 chars")
 	private String name;

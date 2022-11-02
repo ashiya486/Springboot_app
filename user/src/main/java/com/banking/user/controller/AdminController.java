@@ -1,6 +1,5 @@
 package com.banking.user.controller;
 
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,16 +30,16 @@ public class AdminController {
 
 	@GetMapping("/")
 	public ResponseEntity<List<UserDto>> getAllUsers() {
-		try {
-			List<UserDto> fethcedUsers = this.userService.getAllUsers();
-			return ResponseEntity.of(Optional.of(fethcedUsers));
-		} catch (Exception e) {
+		List<UserDto> fetchedUsers = this.userService.getAllUsers();
+		if (!fetchedUsers.isEmpty()) {
+			return ResponseEntity.of(Optional.of(fetchedUsers));
+		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 	}
 
 	@GetMapping("/loan")
-	public ResponseEntity<?> getallloans() throws URISyntaxException {
+	public ResponseEntity<?> getallloans(){
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		try {
@@ -57,8 +56,7 @@ public class AdminController {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		try {
 			return restTemplate.getForEntity(endpoint + "approve/" + id, String.class);
-		} 
-		catch (RestClientResponseException e) {
+		} catch (RestClientResponseException e) {
 			return ResponseEntity.status(e.getRawStatusCode()).build();
 		}
 	}
@@ -76,13 +74,12 @@ public class AdminController {
 	}
 
 	@GetMapping("/loan/filter/{id}")
-	public ResponseEntity<?> filterloan(@PathVariable("id") String id) throws URISyntaxException {
+	public ResponseEntity<?> filterloan(@PathVariable("id") String id){
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		try {
 			return restTemplate.getForEntity(endpoint + "filter/" + id, String.class);
-		} 
-		catch (RestClientResponseException e) {
+		} catch (RestClientResponseException e) {
 			return ResponseEntity.status(e.getRawStatusCode()).build();
 		}
 

@@ -1,7 +1,5 @@
 package com.banking.user.controller;
 
-import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 
@@ -46,27 +44,37 @@ public class UserController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDto> getUser(@PathVariable Integer id) {
-		try{UserDto fetchedUser = this.userService.getUserByUserId(id);
-		return ResponseEntity.ok(fetchedUser);}
-		catch(Exception e){	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();}
-			}
+
+		try {
+			UserDto fetchedUser = this.userService.getUserByUserId(id);
+			return ResponseEntity.ok(fetchedUser);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
 
 	@PostMapping("/loan")
-	public ResponseEntity<?> createLoan(@RequestBody LoanDtoVO loanDto){
+	public ResponseEntity<?> createLoan(@RequestBody LoanDtoVO loanDto) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<LoanDtoVO> entity = new HttpEntity<>(loanDto, headers);
-		try{return restTemplate.postForEntity(endpoint, entity, LoanDtoVO.class);}
-		catch(RestClientResponseException e) {return ResponseEntity.status(e.getRawStatusCode()).build();}
+		try {
+			return restTemplate.postForEntity(endpoint, entity, LoanDtoVO.class);
+		} catch (RestClientResponseException e) {
+			return ResponseEntity.status(e.getRawStatusCode()).build();
+		}
 
 	}
 
 	@GetMapping("/loan/{id}")
-	public ResponseEntity<?> getLoanForUser(@PathVariable Integer id){
+	public ResponseEntity<?> getLoanForUser(@PathVariable Integer id) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		try{return restTemplate.getForEntity(endpoint + id, LoanDtoVO.class);}
-		catch(RestClientResponseException e) {return ResponseEntity.status(e.getRawStatusCode()).build();}
+		try {
+			return restTemplate.getForEntity(endpoint + id, LoanDtoVO.class);
+		} catch (RestClientResponseException e) {
+			return ResponseEntity.status(e.getRawStatusCode()).build();
+		}
 	}
 //@PutMapping("/loan/{id}")
 //public ResponseEntity<?> updateLoanForUser(@RequestBody LoanDtoVO loanDto,@PathVariable Integer id) throws URISyntaxException{

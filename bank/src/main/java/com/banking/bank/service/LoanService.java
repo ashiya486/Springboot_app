@@ -1,8 +1,6 @@
 package com.banking.bank.service;
 
 import java.util.List;
-
-import org.springframework.stereotype.Service;
 import com.banking.bank.dto.LoanDto;
 
 public interface LoanService {

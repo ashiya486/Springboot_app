@@ -1,9 +1,4 @@
 package com.banking.user;
-
-
-import java.time.LocalDate;
-import java.time.Period;
-
 import org.modelmapper.ModelMapper;
 
 import org.springframework.boot.SpringApplication;

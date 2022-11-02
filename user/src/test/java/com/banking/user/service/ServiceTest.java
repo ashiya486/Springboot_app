@@ -1,9 +1,5 @@
 package com.banking.user.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -11,7 +7,6 @@ import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
 
 import com.banking.user.UserApplication;
 import com.banking.user.dto.UserDto;
@@ -19,7 +14,6 @@ import com.banking.user.entity.User;
 import com.banking.user.repository.UserRepository;
 
 @SpringBootTest(classes = UserApplication.class)
-@ComponentScan("com.banking.user.entity")
 public class ServiceTest {
 	@Mock
 	UserRepository userRepo;

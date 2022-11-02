@@ -1,10 +1,12 @@
 package com.banking.bank.dto;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 
 
@@ -65,6 +67,11 @@ public class LoanDto {
 	}
 	public void setDate(String date) {
 		this.date = date;
+		LocalDate currentDate = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		LocalDate futureDate = LocalDate.parse(date, formatter);
+		if(checkfuture(futureDate, currentDate)){throw new RuntimeException("date cannot be in future");
+		}
 	}
 	public long getRateOfInterest() {
 		return rateOfInterest;
@@ -78,4 +85,7 @@ public class LoanDto {
 	public void setDuration(long duration) {
 		this.duration = duration;
 	}
+	public boolean checkfuture(LocalDate futureDate,LocalDate currentDate) {
+			   return futureDate.isAfter(currentDate);
+			}
 }

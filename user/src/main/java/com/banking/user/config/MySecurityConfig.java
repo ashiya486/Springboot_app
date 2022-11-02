@@ -11,8 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
 import com.banking.user.service.CustomUserDetailService;
 
 @SuppressWarnings("deprecation")
@@ -41,27 +39,15 @@ private CustomUserDetailService myUserDetailService;
 		.and()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
-		.exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint).and().logout().logoutUrl("home/logout").permitAll();
+		.exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint).and().logout().logoutUrl("home/Logout").permitAll();
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Override
 protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 	auth.userDetailsService(myUserDetailService);
-	
 	}
 
-//	@Override
-//protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//	auth.inMemoryAuthentication()
-//	.withUser("harry").password(passwordEncoder().encode("pass_h")).roles("ADMIN").and()
-//	.withUser("rachel").password(passwordEncoder().encode("pass_r")).roles("USER");
-//	
-//	}
-//@Bean
-//public PasswordEncoder passwordEncoder() {
-//	return NoOpPasswordEncoder.getInstance();
-//	}
 @Bean
 public BCryptPasswordEncoder passwordEncoder() {
 	return new BCryptPasswordEncoder();

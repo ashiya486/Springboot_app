@@ -22,10 +22,10 @@ package com.banking.user.service;
   return new CustomUserDetail(user); }
   
   
- public UserDetails loadUserById(Integer userId) throws
- UsernameNotFoundException { 
-	  User user=this.userRepo.findById(userId).orElse(null);
- return new CustomUserDetail(user); }
+// public UserDetails loadUserById(Integer userId) throws
+// UsernameNotFoundException { 
+//	  User user=this.userRepo.findById(userId).orElse(null);
+// return new CustomUserDetail(user); }
  
  }
  
