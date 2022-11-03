@@ -3,28 +3,20 @@ package com.banking.bank.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@SuppressWarnings("deprecation")
+
 @Configuration
-@EnableWebSecurity
-public class MySecurityConfig extends WebSecurityConfigurerAdapter{
-//
-//	@Autowired
-//	private JwtAuthenticationFilter jwtFilter;
-//	@Autowired
-//	JwtAuthenticationEntryPoint jwtAuthEntryPoint;
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
+public class MySecurityConfig{
+	@Autowired
+	private JwtAuthenticationFilter jwtFilter;
+	@Autowired
+	JwtAuthenticationEntryPoint jwtAuthEntryPoint;
+	@Bean
+	public  SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 		http
 		.csrf() 
@@ -33,31 +25,20 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter{
 		.anyRequest()
 		.authenticated()
 		.and()
-		.httpBasic();
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and()
+		.exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint);
+		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+		return http.build();
+	
 //		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//		.and()
-//		.exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint).and().logout().logoutUrl("home/Logout").permitAll();
-//		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-	}
-
-	@Override
-protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-	auth.inMemoryAuthentication()
-	.withUser("userModule")
-	.password("UserPassword")
-	.roles("ADMIN");
 
 	}
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-	    return NoOpPasswordEncoder.getInstance();
-	}
+//@Bean
+//public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration configuration) throws Exception{
+//	return configuration.getAuthenticationManager();
+//}
 
-@Override
-@Bean
-public AuthenticationManager authenticationManagerBean() throws Exception {
-	return super.authenticationManagerBean();
-}
 
 
 }

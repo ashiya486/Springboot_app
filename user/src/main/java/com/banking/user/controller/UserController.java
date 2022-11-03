@@ -1,6 +1,5 @@
 package com.banking.user.controller;
 
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -8,9 +7,10 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.banking.user.JwtHelper.JwtUtil;
 import com.banking.user.dto.LoanDtoVO;
 import com.banking.user.dto.UserDto;
+import com.banking.user.entity.CustomUserDetail;
 import com.banking.user.exception.RestTemplateException;
 import com.banking.user.service.UserService;
 @RestController
@@ -32,10 +34,9 @@ public class UserController {
 	private RestTemplate restTemplate;
 	@Autowired
 	private UserService userService;
-	String endpoint = "http://localhost:8082/bank/";
-	String username="userModule";
-	String password="UserPassword";
-
+	@Autowired
+	JwtUtil jwtTokenUtil;
+	String endpoint = "http://bank-service/bank/";
 	@PutMapping("/{id}")
 	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Integer id) {
 
@@ -55,8 +56,8 @@ public class UserController {
 	public ResponseEntity<?> createLoan(@RequestBody LoanDtoVO loanDto) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		String encoding=Base64.getEncoder().encodeToString((username+":"+password).getBytes());
-		headers.set(HttpHeaders.AUTHORIZATION, "Basic "+encoding);
+		String baseCredential=createToken();
+		headers.set(HttpHeaders.AUTHORIZATION, "Bearer "+baseCredential);
 		HttpEntity<LoanDtoVO> entity = new HttpEntity<>(loanDto, headers);
 		try {
 			return restTemplate.postForEntity(endpoint, entity, LoanDtoVO.class);}
@@ -65,18 +66,42 @@ public class UserController {
 	}
 	@GetMapping("/loan/{id}")
 	public ResponseEntity<?> getLoanForUser(@PathVariable Integer id) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<?> entity = createEntity();
 		try {
-			 return restTemplate.getForEntity(endpoint + id, List.class);}
+		ResponseEntity<List> response = restTemplate.exchange(endpoint, HttpMethod.GET, entity, List.class);
+				return response;}
 		catch(HttpClientErrorException e) {throw new RestTemplateException(e.getStatusCode(),e.getResponseBodyAsString());}
-		}
+	}
+
+
+public String createToken() {
+	String username="username";
+	String password="password";
+	 UserDetails userDetails=new CustomUserDetail(username, password);
+	 return jwtTokenUtil.generateToken(userDetails);
+}
+public HttpEntity<?>  createEntity() {
+	HttpHeaders headers = new HttpHeaders();
+	headers.setContentType(MediaType.APPLICATION_JSON);
+	String baseCredential=createToken();
+	headers.set(HttpHeaders.AUTHORIZATION, "Bearer "+baseCredential);
+	return new HttpEntity<>( headers);
+}
+
+}
 
 //@PutMapping("/loan/{id}")
 //public ResponseEntity<?> updateLoanForUser(@RequestBody LoanDtoVO loanDto,@PathVariable Integer id) throws URISyntaxException{
-//	HttpHeaders headers=new HttpHeaders();
-//	headers.setContentType(MediaType.APPLICATION_JSON);
-//	return restTemplate.postForEntity(endpoint, loanDto, LoanDtoVO.class);
+//HttpHeaders headers=new HttpHeaders();
+//headers.setContentType(MediaType.APPLICATION_JSON);
+//return restTemplate.postForEntity(endpoint, loanDto, LoanDtoVO.class);
 //}
-
-}
+//public String createCredential() {
+//String username="username";
+//String password="password";
+//String auth = username + ":" + password;
+//byte [] authentication = auth.getBytes();
+//byte[] base64Authentication = Base64Utils.encode(authentication);
+//String baseCredential = new String(base64Authentication);
+//return baseCredential;
+//}

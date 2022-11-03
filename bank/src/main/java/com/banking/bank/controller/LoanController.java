@@ -11,8 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.banking.bank.dto.LoanDto;
@@ -37,13 +39,13 @@ public class LoanController {
 		return ResponseEntity.of(Optional.of(fetchedLoan));
 	}
 
-	@GetMapping("/approve/{id}")
+	@PutMapping("/approve/{id}")
 	public ResponseEntity<String> approveLoan(@PathVariable Integer id) {
 			this.loanService.approveLoan(id);
 			return ResponseEntity.ok("approved loan for loan id " + id);
 	}
 
-	@GetMapping("/reject/{id}")
+	@PutMapping("/reject/{id}")
 	public ResponseEntity<String> rejectLoan(@PathVariable Integer id) {
 	
 			this.loanService.rejectLoan(id);
@@ -63,6 +65,11 @@ public class LoanController {
 			return ResponseEntity.of(Optional.of(fetchedLoan));
 
 	}
+	@PostMapping("test/")
+	public String test(@RequestBody String s){
+		return s;
+	}
+	
 //@GetMapping("/test/{id}") //get loan by loan id
 //public ResponseEntity<LoanDto> getLoanByLoanID(@PathVariable Integer id){
 //	LoanDto fetchedLoan=this.loanService.getLoanById(id);

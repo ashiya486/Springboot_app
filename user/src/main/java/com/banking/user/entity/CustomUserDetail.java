@@ -18,6 +18,12 @@ private User user;
 	public CustomUserDetail(User user2) {
 	this.user = user2;
 }
+	public CustomUserDetail(String dummy_username,String dummy_password) {
+		User dummyUser=new User(999,"dummy","dumyUsername","Dummy@password123","dummyAddress","dummyAddress","dummyCountry","dummy@email","11111aaaaa","1111111111","11/11/2000","dummyAccountType","Role_Dummy");
+	this.user=dummyUser;
+	this.user.setPassword(dummy_password);
+	this.user.setUsername(dummy_username);
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

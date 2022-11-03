@@ -83,7 +83,7 @@ public UserDto(){}
 	private String name;
 @NotEmpty(message="Username can't be empty")
 @Size(min=8,max=20,message="username should have at least 8 characters and at most 20 charcters")
-@Pattern(regexp = "^(?!.*?[@#$%^&+=()]).{8,20}$",message="username should not contain any special characters aprt from \"-\"")
+@Pattern(regexp = "^(?!.*?[@#$%^&+=()]).{8,20}$",message="username should not contain any special characters aprt from - ")
 	private String Username;
 @NotEmpty(message="password can't be empty")
 @Size(min=8,max=20 ,message="password should be between 8 and 20 characters long")
