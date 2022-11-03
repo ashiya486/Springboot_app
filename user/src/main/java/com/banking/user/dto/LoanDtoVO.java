@@ -22,20 +22,20 @@ public class LoanDtoVO {
 		public void setUserId(int userId) {
 			this.userId = userId;
 		}
-		@NotEmpty
-		@Size(max=50)
+		@NotEmpty(message="Filed loan type can't be empty")
+		@Size(max=50,message="maximun limit of 50 characters exceeded")
 		private String loanType;
-		@NotEmpty
+		@NotEmpty(message="field amount can't be empty")
 		@Min(0)
 		private long amount;
-		@NotEmpty
+		@NotEmpty(message="filed date can't be empty")
 		@JsonFormat( pattern = "MM/dd/yyyy")
 		private String date;
-		@NotEmpty
+		@NotEmpty(message="field rate of interest can't be empty")
 		@Min(0)
 		@Max(100)
 		private long rateOfInterest;
-		@NotEmpty
+		@NotEmpty(message="field duration can't be empty")
 		@Min(0)
 		private long duration;
 		

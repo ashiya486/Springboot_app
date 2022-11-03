@@ -17,6 +17,6 @@ public class LoanControllerAdvice extends ResponseEntityExceptionHandler {
 	}
 @ExceptionHandler(BadRequestException.class)
 public ResponseEntity<Object>badRequest(BadRequestException ex,WebRequest request){
-	return new ResponseEntity<Object>(new ErrorDetails(ex.getMessage(),LocalDateTime.now()),HttpStatus.BAD_REQUEST);
+	return new ResponseEntity<Object>(ex.getMessage(),HttpStatus.BAD_REQUEST);
 }
 }

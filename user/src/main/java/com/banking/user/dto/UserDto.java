@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.banking.user.exception.BadRequestException;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class UserDto {
@@ -41,20 +42,29 @@ private int id;
 		LocalDate currentDate = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		LocalDate date = LocalDate.parse(dob, formatter);
-		if(calculateAge(date,currentDate)<18){throw new RuntimeException("must be 18 years old");
+		if(calculateAge(date,currentDate)<18){throw new BadRequestException("must be 18 years old");
 		}
 	}
-public UserDto(int id, @NotEmpty @Size(max = 50, message = "name should not exceed 50 chars") String name,
-			@NotEmpty @Size(min = 8, max = 20) @Pattern(regexp = "^(?!.*?[@#$%^&+=()]).{8,20}$") String username,
-			@NotEmpty @Size(min = 8, max = 20) @Pattern(regexp = "^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\\d]){1,})(?=(.*[\\W]){1,})(?!.*\\s).{8,20}$") String password,
-			@NotEmpty @Size(max = 200) String address, @NotEmpty @Size(max = 50) String state,
-			@NotEmpty @Size(max = 100) String country,
-			@NotEmpty @Email(message = "email address not valid") String email,
-			@NotEmpty @Size(min = 10, max = 10) String pan, @NotEmpty @Size(min = 10, max = 10) String contactNo,
-			@NotEmpty String dob, @NotEmpty @Size(max = 50) String accountType, @NotEmpty String role) {
+
+
+
+public UserDto(int id,
+			@NotEmpty(message = "name can't be empty") @Size(max = 50, message = "name should not exceed 50 chars") String name,
+			@NotEmpty(message = "Username can't be empty") @Size(min = 8, max = 20, message = "username should have at least 8 characters and at most 20 charcters") @Pattern(regexp = "^(?!.*?[@#$%^&+=()]).{8,20}$", message = "username should not contain any special characters aprt from \"-\"") String username,
+			@NotEmpty(message = "password can't be empty") @Size(min = 8, max = 20, message = "password should be between 8 and 20 characters long") @Pattern(regexp = "^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\\d]){1,})(?=(.*[\\W]){1,})(?!.*\\s).{8,20}$", message = "password must have  atleast have one capital letter , one small letter, one special character and one number") String password,
+			@NotEmpty(message = "address can't be empty") @Size(max = 200, message = "address can't be more than 200 charcters long") String address,
+			@NotEmpty(message = "state can't be empty") @Size(max = 50, message = "state can't be more than 50 characters long") String state,
+			@NotEmpty(message = "country can't be empty") @Size(max = 100, message = "country can't e more than 100 characters long") String country,
+			@NotEmpty(message = "email can't be empty") @Email(message = "email address not valid") String email,
+			@NotEmpty(message = "PAN can't be empty") @Size(min = 10, max = 10, message = "inavlid PAN should be 10 characters long") String pan,
+			@NotEmpty(message = "contactNo can't be empty") @Size(min = 10, max = 10, message = "invalid contact number should be 10 digits ") String contactNo,
+			@NotEmpty(message = "DOB can't be empty") String dob,
+			@NotEmpty(message = "accountType can't be empty") @Size(max = 50, message = "can't be more than 50 characters long") String accountType,
+			@NotEmpty(message = "role can't be empty") String role) {
+		super();
 		this.id = id;
 		this.name = name;
-		this.Username = username;
+		Username = username;
 		this.password = password;
 		this.address = address;
 		this.state = state;
@@ -66,43 +76,44 @@ public UserDto(int id, @NotEmpty @Size(max = 50, message = "name should not exce
 		this.accountType = accountType;
 		this.role = role;
 	}
+
 public UserDto(){}
-@NotEmpty
+@NotEmpty(message="name can't be empty")
 @Size(max=50,message="name should not exceed 50 chars")
 	private String name;
-@NotEmpty
-@Size(min=8,max=20)
-@Pattern(regexp = "^(?!.*?[@#$%^&+=()]).{8,20}$")
+@NotEmpty(message="Username can't be empty")
+@Size(min=8,max=20,message="username should have at least 8 characters and at most 20 charcters")
+@Pattern(regexp = "^(?!.*?[@#$%^&+=()]).{8,20}$",message="username should not contain any special characters aprt from \"-\"")
 	private String Username;
-@NotEmpty
-@Size(min=8,max=20)
-@Pattern(regexp ="^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\\d]){1,})(?=(.*[\\W]){1,})(?!.*\\s).{8,20}$")
+@NotEmpty(message="password can't be empty")
+@Size(min=8,max=20 ,message="password should be between 8 and 20 characters long")
+@Pattern(regexp ="^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\\d]){1,})(?=(.*[\\W]){1,})(?!.*\\s).{8,20}$",message="password must have  atleast have one capital letter , one small letter, one special character and one number")
 	private String password;
-@NotEmpty
-@Size(max=200)
+@NotEmpty(message="address can't be empty")
+@Size(max=200,message="address can't be more than 200 charcters long")
 	private String address;
-@NotEmpty
-@Size(max=50)
+@NotEmpty(message="state can't be empty")
+@Size(max=50,message="state can't be more than 50 characters long")
 	private String state;
-@NotEmpty
-@Size(max=100)
+@NotEmpty(message="country can't be empty")
+@Size(max=100,message="country can't e more than 100 characters long")
 	private String country;
-@NotEmpty
+@NotEmpty(message="email can't be empty")
 @Email(message="email address not valid")
 	private String email;
-@NotEmpty
-@Size(min=10,max=10)
+@NotEmpty(message="PAN can't be empty")
+@Size(min=10,max=10,message="inavlid PAN should be 10 characters long")
 	private String pan;
-@NotEmpty
-@Size(min=10,max=10)
+@NotEmpty(message="contactNo can't be empty")
+@Size(min=10,max=10,message="invalid contact number should be 10 digits ")
 	private String contactNo;
-@NotEmpty
+@NotEmpty(message="DOB can't be empty")
 @JsonFormat( pattern = "dd/MM/yyyy")
 private String dob;
-@NotEmpty
-@Size(max=50)
+@NotEmpty(message="accountType can't be empty")
+@Size(max=50,message="can't be more than 50 characters long")
 	private String accountType;
-@NotEmpty
+@NotEmpty(message="role can't be empty")
 	private String role;
 
 	public String getRole() {

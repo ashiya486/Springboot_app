@@ -1,5 +1,6 @@
 package com.banking.user.controller;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -31,7 +32,9 @@ public class UserController {
 	private RestTemplate restTemplate;
 	@Autowired
 	private UserService userService;
-	String endpoint = "http://BANK-SERVICE/bank/";
+	String endpoint = "http://localhost:8082/bank/";
+	String username="userModule";
+	String password="UserPassword";
 
 	@PutMapping("/{id}")
 	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Integer id) {
@@ -46,13 +49,14 @@ public class UserController {
 
 			UserDto fetchedUser = this.userService.getUserByUserId(id);
 			return ResponseEntity.ok(fetchedUser);
-		
 	}
 
 	@PostMapping("/loan")
 	public ResponseEntity<?> createLoan(@RequestBody LoanDtoVO loanDto) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
+		String encoding=Base64.getEncoder().encodeToString((username+":"+password).getBytes());
+		headers.set(HttpHeaders.AUTHORIZATION, "Basic "+encoding);
 		HttpEntity<LoanDtoVO> entity = new HttpEntity<>(loanDto, headers);
 		try {
 			return restTemplate.postForEntity(endpoint, entity, LoanDtoVO.class);}

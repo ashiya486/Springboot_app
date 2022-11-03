@@ -89,8 +89,8 @@ public class LoanServiceImpl implements LoanService {
 
 	@Override
 	public List<LoanDto> filterStatus(String status) throws NoSuchElementException {
-//		if(status!="pending"&&status!="approved"&&status!="rejected")
-//			throw new BadRequestException("request "+status+" does not match any saved filter");
+		if(!status.equals("pending")&&!status.equals("aproved")&&!status.equals("rejected"))
+			throw new BadRequestException("request "+status+" does not match any saved filter");
 		List<Loan> filteredLoan = this.loanRepo.findAllByStatus(status);
 		if(filteredLoan.isEmpty())
 			throw new NotfoundException("Currently there are no "+status+" loans ");
