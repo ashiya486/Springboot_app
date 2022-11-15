@@ -1,14 +1,14 @@
 # Springboot_app
-workflow api testing:
-1 /home/register---register user
-2 /home/auth--get jwt token
-3 /home/user/{id}---view/update user info
-4 /home/user/loan----create loan
-5 register admin user and generate admin jwt token
-6 /home/admin/---view list of all users 
-7 /home/admin/loan----view list of all loans 
-8 /home/admin/loan/approve/{id}--approve loan for loan id,substitute "approve" for "reject" to reject loan 
-9/home/admin/loan/filter/{filter}---filter loan based on predefind filter-{"approved","pending","rejected"}
+workflow api testing:<br />
+1 /home/register---register user<br />
+2 /home/auth--get jwt token<br />
+3 /home/user/{id}---view/update user info<br />
+4 /home/user/loan----create loan<br />
+5 register admin user and generate admin jwt token<br />
+6 /home/admin/---view list of all users <br />
+7 /home/admin/loan----view list of all loans <br />
+8 /home/admin/loan/approve/{id}--approve loan for loan id,substitute "approve" for "reject" to reject loan<br />
+9/home/admin/loan/filter/{filter}---filter loan based on predefind filter-{"approved","pending","rejected"}<br />
 
 sample inputs
 customer user:
