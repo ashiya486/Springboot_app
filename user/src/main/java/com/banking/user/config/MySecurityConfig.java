@@ -12,11 +12,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
 import com.banking.user.service.CustomUserDetailService;
 
 
 @Configuration
 @EnableWebSecurity
+@EnableWebMvc
 public class MySecurityConfig {
 	@Autowired
 private CustomUserDetailService myUserDetailService;
@@ -26,14 +29,16 @@ private CustomUserDetailService myUserDetailService;
 	JwtAuthenticationEntryPoint jwtAuthEntryPoint;
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
+		 final String[] PUBLIC_URLS= {
+				"/home/auth","/home/register","/v3/api-docs","/v2/api-docs","/swagger-resources/**",
+				"/swagger-ui/**","/web-jars/**"};
 		http
 		.csrf() 
 		.disable()
 		.authorizeRequests()
 		.antMatchers("/home/admin/**").hasRole("ADMIN")
 		.antMatchers("/home/user/**").hasRole("USER")
-		.antMatchers("/home/auth","/home/register","/home/test")
+		.antMatchers(PUBLIC_URLS)
 		.permitAll()
 		.anyRequest()
 		.authenticated()

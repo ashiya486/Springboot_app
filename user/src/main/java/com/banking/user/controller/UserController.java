@@ -10,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,9 +21,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.banking.user.JwtHelper.JwtUtil;
+import com.banking.user.JwtHelper.RestJwt;
 import com.banking.user.dto.LoanDtoVO;
 import com.banking.user.dto.UserDto;
-import com.banking.user.entity.CustomUserDetail;
 import com.banking.user.exception.RestTemplateException;
 import com.banking.user.service.UserService;
 @RestController
@@ -36,6 +35,8 @@ public class UserController {
 	private UserService userService;
 	@Autowired
 	JwtUtil jwtTokenUtil;
+	@Autowired
+	private RestJwt restJwt;
 	String endpoint = "http://bank-service/bank/";
 	@PutMapping("/{id}")
 	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Integer id) {
@@ -56,7 +57,7 @@ public class UserController {
 	public ResponseEntity<?> createLoan(@RequestBody LoanDtoVO loanDto) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		String baseCredential=createToken();
+		String baseCredential=restJwt.createToken();
 		headers.set(HttpHeaders.AUTHORIZATION, "Bearer "+baseCredential);
 		HttpEntity<LoanDtoVO> entity = new HttpEntity<>(loanDto, headers);
 		try {
@@ -66,7 +67,7 @@ public class UserController {
 	}
 	@GetMapping("/loan/{id}")
 	public ResponseEntity<?> getLoanForUser(@PathVariable Integer id) {
-		HttpEntity<?> entity = createEntity();
+		HttpEntity<?> entity = restJwt.createEntity();
 		try {
 		ResponseEntity<List> response = restTemplate.exchange(endpoint, HttpMethod.GET, entity, List.class);
 				return response;}
@@ -74,34 +75,4 @@ public class UserController {
 	}
 
 
-public String createToken() {
-	String username="username";
-	String password="password";
-	 UserDetails userDetails=new CustomUserDetail(username, password);
-	 return jwtTokenUtil.generateToken(userDetails);
 }
-public HttpEntity<?>  createEntity() {
-	HttpHeaders headers = new HttpHeaders();
-	headers.setContentType(MediaType.APPLICATION_JSON);
-	String baseCredential=createToken();
-	headers.set(HttpHeaders.AUTHORIZATION, "Bearer "+baseCredential);
-	return new HttpEntity<>( headers);
-}
-
-}
-
-//@PutMapping("/loan/{id}")
-//public ResponseEntity<?> updateLoanForUser(@RequestBody LoanDtoVO loanDto,@PathVariable Integer id) throws URISyntaxException{
-//HttpHeaders headers=new HttpHeaders();
-//headers.setContentType(MediaType.APPLICATION_JSON);
-//return restTemplate.postForEntity(endpoint, loanDto, LoanDtoVO.class);
-//}
-//public String createCredential() {
-//String username="username";
-//String password="password";
-//String auth = username + ":" + password;
-//byte [] authentication = auth.getBytes();
-//byte[] base64Authentication = Base64Utils.encode(authentication);
-//String baseCredential = new String(base64Authentication);
-//return baseCredential;
-//}

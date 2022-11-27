@@ -22,6 +22,18 @@ public class LoanDto {
 	}
 	@NotNull
 	private int userId;
+	public LoanDto(int id, @NotNull int userId, @NotEmpty @Size(max = 50) String loanType, @NotNull @Min(0) long amount,
+			String date, @NotNull @Max(100) long rateOfInterest, @NotNull @Min(0) long duration, String status) {
+		super();
+		this.id = id;
+		this.userId = userId;
+		this.loanType = loanType;
+		this.amount = amount;
+		this.date = date;
+		this.rateOfInterest = rateOfInterest;
+		this.duration = duration;
+		this.status = status;
+	}
 	public int getUserId() {
 		return userId;
 	}

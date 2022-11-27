@@ -1,7 +1,6 @@
 package com.banking.user.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
@@ -42,8 +41,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDto updateUser(UserDto userDto, Integer id) {
-		User oldUser = this.userRepo.findById(id).orElse(null);
-		if (oldUser != null) {
+		Optional<User> oldUser = this.userRepo.findById(id);
+		if (!oldUser.isEmpty()) {
 			User user = this.modelMapper.map(userDto, User.class);
 			user.setId(id);
 			user.setPassword(passEncode.encode(user.getPassword()));

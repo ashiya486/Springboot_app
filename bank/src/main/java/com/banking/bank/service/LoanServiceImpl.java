@@ -1,7 +1,9 @@
 package com.banking.bank.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -24,17 +26,18 @@ public class LoanServiceImpl implements LoanService {
 	@Override
 	public LoanDto createLoan(LoanDto loanDto)throws BadRequestException {
 		Loan loanRequest = this.dtoToLoan(loanDto);
+		List<Loan> matchingLoan=new ArrayList<>();
 		List<Loan> listLoan = loanRepo.findAllByUserId(loanRequest.getUserId());
 		if (!listLoan.isEmpty()) {
-			listLoan.stream().forEach(loan -> {
-				if (loan.getLoanType() == loanRequest.getLoanType()
+			matchingLoan=listLoan.stream().filter
+					(loan -> loan.getLoanType().equals(loanRequest.getLoanType())
 						&& loan.getAmount() == loanRequest.getAmount()
-						&& loan.getDate() == loanRequest.getDate()
+						&& loan.getDate().equals(loanRequest.getDate()) 
 						&& loan.getRateOfInterest() == loanRequest.getRateOfInterest()
-						&& loan.getDuration() == loanRequest.getDuration())
-					throw new BadRequestException("duplicate loan entry");
-
-			});
+						&& loan.getDuration() == loanRequest.getDuration()).collect(Collectors.toList());
+		if(matchingLoan.isEmpty()) {
+			throw new BadRequestException("duplicate loan entry");
+		}
 		}
 		loanRequest.setStatus("pending");
 		LoanDto createdLoan = this.loanToDto(this.loanRepo.save(loanRequest));
@@ -71,20 +74,20 @@ public class LoanServiceImpl implements LoanService {
 
 	@Override
 	public void approveLoan(Integer id) throws NotfoundException {
-		Loan loan = this.loanRepo.findById(id).orElse(null);
-		if(loan==null)
+		Optional<Loan> loan = this.loanRepo.findById(id);
+		if(loan.isEmpty())
 			throw new NotfoundException("no loan with id "+id+" found to approve");
-		loan.setStatus("approved");
-		this.loanRepo.save(loan);
+		loan.get().setStatus("approved");
+		this.loanRepo.save(loan.get());
 	}
 
 	@Override
 	public void rejectLoan(Integer id) throws NotfoundException {
-		Loan loan = this.loanRepo.findById(id).orElse(null);
-		if(loan==null)
+		Optional<Loan> loan = this.loanRepo.findById(id);
+		if(loan.isEmpty())
 			throw new NotfoundException("no loan with id "+id+" found to reject");
-		loan.setStatus("rejected");
-		this.loanRepo.save(loan);
+		loan.get().setStatus("rejected");
+		this.loanRepo.save(loan.get());
 	}
 
 	@Override

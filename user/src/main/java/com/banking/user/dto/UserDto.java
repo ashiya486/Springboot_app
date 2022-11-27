@@ -2,7 +2,6 @@ package com.banking.user.dto;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.format.DateTimeFormatter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -11,7 +10,7 @@ import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.banking.user.exception.BadRequestException;
+import com.banking.user.validation.UserAgeValidation;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class UserDto {
@@ -39,11 +38,6 @@ private int id;
 
 	public void setDob(String dob) {
 		this.dob = dob;
-		LocalDate currentDate = LocalDate.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		LocalDate date = LocalDate.parse(dob, formatter);
-		if(calculateAge(date,currentDate)<18){throw new BadRequestException("must be 18 years old");
-		}
 	}
 
 
@@ -109,6 +103,7 @@ public UserDto(){}
 	private String contactNo;
 @NotEmpty(message="DOB can't be empty")
 @JsonFormat( pattern = "dd/MM/yyyy")
+@UserAgeValidation
 private String dob;
 @NotEmpty(message="accountType can't be empty")
 @Size(max=50,message="can't be more than 50 characters long")

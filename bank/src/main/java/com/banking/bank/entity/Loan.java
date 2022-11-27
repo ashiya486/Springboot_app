@@ -9,10 +9,13 @@ import com.sun.istack.NotNull;
 @Entity
 public class Loan {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 private int id;
 	@NotNull
 private int userId;
+public Loan() {
+
+	}
 public int getUserId() {
 	return userId;
 }
@@ -20,6 +23,18 @@ public void setUserId(int userId) {
 	this.userId = userId;
 }@NotNull
 private String loanType;
+public Loan(int id, int userId, String loanType, long amount, String date, long rateOfInterest, long duration,
+		String status) {
+	super();
+	this.id = id;
+	this.userId = userId;
+	this.loanType = loanType;
+	this.amount = amount;
+	this.date = date;
+	this.rateOfInterest = rateOfInterest;
+	this.duration = duration;
+	this.status = status;
+}
 @NotNull
 private long amount;
 @NotNull
