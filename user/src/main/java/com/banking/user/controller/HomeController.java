@@ -16,11 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.banking.user.JwtHelper.JwtUtil;
-import com.banking.user.dto.UserDto;
-import com.banking.user.entity.AuthenticationRequest;
-import com.banking.user.entity.AuthenticationResponse;
+import com.banking.user.config.JwtUtil;
+
 import com.banking.user.exception.BadRequestException;
+import com.banking.user.payload.AuthenticationRequest;
+import com.banking.user.payload.AuthenticationResponse;
+import com.banking.user.payload.UserDto;
 import com.banking.user.service.CustomUserDetailService;
 import com.banking.user.service.UserService;
 

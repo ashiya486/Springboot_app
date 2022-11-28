@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import com.banking.user.JwtHelper.JwtUtil;
-import com.banking.user.JwtHelper.RestJwt;
-import com.banking.user.dto.LoanDtoVO;
-import com.banking.user.dto.UserDto;
+import com.banking.user.config.JwtUtil;
+import com.banking.user.config.RestJwt;
 import com.banking.user.exception.RestTemplateException;
+import com.banking.user.payload.LoanDtoVO;
+import com.banking.user.payload.UserDto;
 import com.banking.user.service.UserService;
 @RestController
 @RequestMapping("/home/user")

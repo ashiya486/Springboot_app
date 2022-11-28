@@ -1,4 +1,4 @@
-package com.banking.bank.dto;
+package com.banking.bank.payload;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -19,6 +19,9 @@ public class LoanDto {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public LoanDto() {
+		super();
 	}
 	@NotNull
 	private int userId;

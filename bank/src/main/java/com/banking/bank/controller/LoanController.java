@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.banking.bank.dto.LoanDto;
+import com.banking.bank.payload.LoanDto;
 import com.banking.bank.service.LoanService;
 
 @RestController

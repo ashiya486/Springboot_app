@@ -1,4 +1,4 @@
-package com.banking.user.JwtHelper;
+package com.banking.user.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;

@@ -1,4 +1,4 @@
-package com.banking.user.dto;
+package com.banking.user.payload;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

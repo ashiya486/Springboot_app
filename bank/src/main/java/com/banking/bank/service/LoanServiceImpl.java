@@ -10,10 +10,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.banking.bank.dto.LoanDto;
 import com.banking.bank.entity.Loan;
 import com.banking.bank.exception.BadRequestException;
 import com.banking.bank.exception.NotfoundException;
+import com.banking.bank.payload.LoanDto;
 import com.banking.bank.repository.LoanRepository;
 
 @Service

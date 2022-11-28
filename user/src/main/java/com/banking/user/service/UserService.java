@@ -2,7 +2,7 @@ package com.banking.user.service;
 
 import java.util.List;
 
-import com.banking.user.dto.UserDto;
+import com.banking.user.payload.UserDto;
 
 public interface UserService {
 	UserDto createUser(UserDto user);

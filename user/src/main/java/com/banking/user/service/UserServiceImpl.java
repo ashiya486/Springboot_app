@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.banking.user.dto.UserDto;
 import com.banking.user.entity.User;
 import com.banking.user.exception.BadRequestException;
 import com.banking.user.exception.NotfoundException;
+import com.banking.user.payload.UserDto;
 import com.banking.user.repository.UserRepository;
 
 @Service

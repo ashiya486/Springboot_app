@@ -1,4 +1,4 @@
-package com.banking.user.entity;
+package com.banking.user.payload;
 
 public class AuthenticationRequest {
 private String username;

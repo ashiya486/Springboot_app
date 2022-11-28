@@ -18,8 +18,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.banking.bank.dto.LoanDto;
+
 import com.banking.bank.entity.Loan;
+import com.banking.bank.payload.LoanDto;
 import com.banking.bank.repository.LoanRepository;
 
 @SpringBootTest

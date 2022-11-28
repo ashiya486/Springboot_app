@@ -15,7 +15,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.banking.user.JwtHelper.JwtUtil;
 import com.banking.user.service.CustomUserDetailService;
 @Component 
 class JwtAuthenticationFilter extends OncePerRequestFilter {

@@ -1,7 +1,8 @@
 package com.banking.bank.service;
 
 import java.util.List;
-import com.banking.bank.dto.LoanDto;
+
+import com.banking.bank.payload.LoanDto;
 
 public interface LoanService {
 	

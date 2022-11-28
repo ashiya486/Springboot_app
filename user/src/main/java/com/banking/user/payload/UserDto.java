@@ -1,4 +1,4 @@
-package com.banking.user.dto;
+package com.banking.user.payload;
 
 import java.time.LocalDate;
 import java.time.Period;

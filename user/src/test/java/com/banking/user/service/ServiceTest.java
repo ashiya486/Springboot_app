@@ -17,8 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.banking.user.UserApplication;
-import com.banking.user.dto.UserDto;
 import com.banking.user.entity.User;
+import com.banking.user.payload.UserDto;
 import com.banking.user.repository.UserRepository;
 
 @SpringBootTest(classes = UserApplication.class)

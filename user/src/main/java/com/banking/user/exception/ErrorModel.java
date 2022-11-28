@@ -27,6 +27,5 @@ public void setMessageError(String messageError) {
 	this.messageError = messageError;
 }
 private String messageError;
-private ErrorModel() {};
 
 }
